@@ -1,3 +1,7 @@
+"""
+Игра «Змейка». Управляй змейкой и собирай яблоки!
+"""
+
 import pygame
 import random
 
@@ -77,7 +81,7 @@ class Snake(GameObject):
     def update_direction(self):
         """Применяет новое направление движения, если оно корректно."""
         if self.next_direction:
-            # запрет разворота назад
+            # Запрет разворота назад
             if (self.next_direction[0] * -1, self.next_direction[1] * -1) != self.direction:
                 self.direction = self.next_direction
             self.next_direction = None
@@ -88,7 +92,6 @@ class Snake(GameObject):
         dir_x, dir_y = self.direction
         new_head = ((head_x + dir_x) % SCREEN_WIDTH, (head_y + dir_y) % SCREEN_HEIGHT)
 
-        # Проверка столкновения с собой
         if new_head in self.positions[1:]:
             self.reset()
         else:
@@ -97,7 +100,7 @@ class Snake(GameObject):
                 self.positions.pop()
 
     def draw(self, surface):
-        """Отрисовка змейки и затирание следов."""
+        """Отрисовка всех сегментов змейки."""
         for pos in self.positions:
             rect = pygame.Rect(pos, (CELL_SIZE, CELL_SIZE))
             pygame.draw.rect(surface, self.body_color, rect)
@@ -108,7 +111,7 @@ class Snake(GameObject):
 
 
 def handle_keys(snake):
-    """Обработка нажатия клавиш."""
+    """Обработка нажатия клавиш для управления змейкой."""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -126,6 +129,7 @@ def handle_keys(snake):
 
 
 def main():
+    """Основной игровой цикл."""
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Изгиб Питона")
@@ -141,7 +145,6 @@ def main():
         snake.update_direction()
         snake.move()
 
-        # Проверка: съедено яблоко?
         if snake.get_head_position() == apple.position:
             snake.length += 1
             apple.randomize_position()
@@ -150,7 +153,7 @@ def main():
         apple.draw(screen)
 
         pygame.display.update()
-        clock.tick(20)  # FPS ограничение
+        clock.tick(20)
 
 
 if __name__ == "__main__":
